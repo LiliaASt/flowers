@@ -1,6 +1,6 @@
 import os
 import requests
-
+import shutil
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -37,3 +37,27 @@ def getting_links(query:str, quantity:int) -> None:
     driver.close()
     driver.quit()
     print("The files are ready")
+
+def download_images(query:str) -> None:
+
+    img_count=0
+
+    creating_folder("dataset")
+    creating_folder(os.path.join("dataset", f"{query}"))
+
+    with open(f"{query}.txt", "r") as file:
+        for line in file:
+            try:
+                url = line.strip()
+                time.sleep(4)
+                response = requests.get(url, stream=True)
+                if response.status_code == 200:
+                    img_count += 1
+                    with open(os.path.join("dataset", f"{query}", f"{str(img_count).zfill(4)}.jpg"), "wb") as image_file:
+                        shutil.copyfileobj(response.raw, image_file)
+                else:
+                    continue
+            except:
+                continue
+    print(f'{img_count} images downloaded')
+
