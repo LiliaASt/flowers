@@ -61,3 +61,15 @@ def download_images(query:str) -> None:
                 continue
     print(f'{img_count} images downloaded')
 
+def main() -> None:
+    if os.path.isdir("dataset"):
+        shutil.rmtree("dataset")
+
+    query = "rose"
+    getting_links(query , 3)
+    download_images(query)
+    time.sleep(4)
+
+    query  = "tulip"
+    getting_links(query , 3)
+    download_images(query)
